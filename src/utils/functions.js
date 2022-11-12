@@ -1,15 +1,15 @@
 import firebase from './firebase'
-import { getDatabase, onValue, push, ref, set } from 'firebase/database'
+import { getDatabase, onValue, push, ref, remove, set, update } from 'firebase/database'
 import { useEffect, useState } from 'react';
 
-export const AddUser =(name , phone , gender)=>{
+export const AddUser =(info)=>{
     const db = getDatabase();
     const userRef = ref(db,'baglanti');
     const newUserRef = push(userRef)
     set((newUserRef),{
-        username:name,
-        phoneNumber:phone,
-        Gender:gender,
+        username:info.username,
+        phoneNumber:info.phoneNumber, //!dikkart
+        gender:info.gender,
 
     })
 }
@@ -31,4 +31,21 @@ export const GetUser =()=>{
       })
     }, [])
     return {contactList}
+}
+export const DeleteUser=(id)=>{
+  const db = getDatabase();
+  const userRef=ref(db,"baglanti");
+  remove(ref(db,"baglanti/"+id))
+
+  // Toastify("Kullanıcı bilgisi silindi")
+}
+
+export const EditUser=(info)=>{
+  const db = getDatabase();
+  const updates = {};
+  
+
+  updates["baglanti/"+info.id]=info;
+  return update(ref(db),updates);
+
 }

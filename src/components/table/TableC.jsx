@@ -6,17 +6,15 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { GetUser } from '../../utils/functions';
+import { DeleteUser, EditUser, GetUser } from '../../utils/functions';
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
 
-
-export default function BasicTable() {
+const TableC= ({editHandler})=> {
   const {contactList} = GetUser(); 
+
+
   return (
     <TableContainer component={Paper}>
       <Table>
@@ -30,18 +28,18 @@ export default function BasicTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {contactList?.map((row) => (
+          {contactList?.map((row,index) => (
             <TableRow
-              key={row.name}
+              key={index}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
                 {row.username}
               </TableCell>
               <TableCell align="right">{row.phoneNumber}</TableCell>
-              <TableCell align="right">{row.Gender}</TableCell>
-              <TableCell align="right"> <DeleteIcon/> </TableCell>
-              <TableCell align="right"> <EditIcon/> </TableCell>
+              <TableCell align="right">{row.gender}</TableCell>
+              <TableCell align="right"> <DeleteIcon onClick={()=> DeleteUser(row.id)}/> </TableCell>
+              <TableCell align="right"> <EditIcon onClick={()=> editHandler(row?.id,row?.username,row?.phoneNumber,row?.gender)}/> </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -49,3 +47,4 @@ export default function BasicTable() {
     </TableContainer>
   );
 }
+export default TableC;
